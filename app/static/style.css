@@ -1,0 +1,57 @@
+body {
+    background-color: lightblue;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+main {
+    padding: 2rem;
+}
+
+h1 {
+    color: darkgreen;
+}
+
+.spell-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-top: 2rem;
+}
+
+.spell-column {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    max-width: 220px;
+}
+
+.column-header {
+    font-weight: 700;
+    color: darkgreen;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.spell-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.spell-entry label {
+    font-weight: 600;
+    color: darkgreen;
+    text-align: center;
+}
+
+.spell-entry select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #3d6b3d;
+    border-radius: 6px;
+    background: white;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
