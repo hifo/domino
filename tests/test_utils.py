@@ -1,8 +1,6 @@
-from types import SimpleNamespace
-
 import pytest
 
-from utils.utils import fetch_api_list
+from utils.utils import fetch_api_list, fetch_spell_detail
 
 
 class DummyResponse:
@@ -35,11 +33,22 @@ def test_fetch_api_list_accepts_plain_list(monkeypatch):
 
 def test_fetch_api_list_extracts_list_from_dict(monkeypatch):
     def fake_get(url, params=None, timeout=10):
+        assert url in {
+            "https://example.com/items",
+            "https://example.com/results",
+            "https://example.com/spells",
+        }
         if url == "https://example.com/items":
+            assert params is None
+            assert timeout == 10
             return DummyResponse({"items": [{"name": "shield"}, {"name": "heal"}]})
         if url == "https://example.com/results":
+            assert params is None
+            assert timeout == 10
             return DummyResponse({"results": ["a", "b"]})
         if url == "https://example.com/spells":
+            assert params is None
+            assert timeout == 10
             return DummyResponse({"spells": ["cure disease", "light"]})
         raise AssertionError(f"Unexpected URL: {url}")
 
@@ -52,9 +61,24 @@ def test_fetch_api_list_extracts_list_from_dict(monkeypatch):
 
 def test_fetch_api_list_raises_for_non_list_payload(monkeypatch):
     def fake_get(url, params=None, timeout=10):
+        assert url == "https://example.com/unsupported"
+        assert params is None
+        assert timeout == 10
         return DummyResponse({"status": "ok"})
 
     monkeypatch.setattr("requests.get", fake_get)
 
     with pytest.raises(ValueError):
         fetch_api_list("https://example.com/unsupported")
+
+
+def test_fetch_spell_detail_uses_encoded_spell_name(monkeypatch):
+    def fake_get(url, params=None, timeout=10):
+        assert url == "https://antioch-production.up.railway.app/antioch/api/v1.0/spell/Cure%20Disease"
+        assert params is None
+        assert timeout == 10
+        return DummyResponse({"spells": {"name": "Cure Disease", "circle": 1}})
+
+    monkeypatch.setattr("requests.get", fake_get)
+
+    assert fetch_spell_detail("Cure Disease") == {"spells": {"name": "Cure Disease", "circle": 1}}

@@ -1,7 +1,9 @@
 """Flask application factory for the Domino app."""
-from flask import Flask, render_template
+import requests
 
-from utils.utils import fetch_api_list
+from flask import Flask, jsonify, render_template
+
+from utils.utils import fetch_api_list, fetch_spell_detail
 
 
 def create_app() -> Flask:
@@ -17,7 +19,7 @@ def create_app() -> Flask:
             spells_level_4 = fetch_api_list(spell_level=4)
             spells_level_5 = fetch_api_list(spell_level=5)
             spells_level_6 = fetch_api_list(spell_level=6)
-        except Exception:
+        except (requests.RequestException, ValueError):
             spells_level_1 = []
             spells_level_2 = []
             spells_level_3 = []
@@ -25,5 +27,12 @@ def create_app() -> Flask:
             spells_level_5 = []
             spells_level_6 = []
         return render_template("index.html", spells_level_1=spells_level_1, spells_level_2=spells_level_2, spells_level_3=spells_level_3, spells_level_4=spells_level_4, spells_level_5=spells_level_5, spells_level_6=spells_level_6)
+
+    @app.get("/spell/<path:spell_name>")
+    def spell_detail(spell_name: str):
+        try:
+            return jsonify(fetch_spell_detail(spell_name))
+        except (requests.RequestException, ValueError):
+            return jsonify({"error": "Unable to load spell details"}), 502
 
     return app

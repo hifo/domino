@@ -7,6 +7,50 @@ main {
     padding: 2rem;
 }
 
+.ui-tabs {
+    margin-top: 1.5rem;
+}
+
+.tab-buttons {
+    display: inline-flex;
+    gap: 0.5rem;
+    padding: 0.35rem;
+    border: 1px solid rgba(61, 107, 61, 0.35);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(8px);
+}
+
+.tab-button {
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    color: #1f3d1f;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    background: darkgreen;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 60, 0, 0.18);
+}
+
+.tab-panel {
+    margin-top: 1.25rem;
+}
+
+.tab-panel[hidden] {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
 h1 {
     color: darkgreen;
 }
@@ -74,6 +118,7 @@ h1 {
 
 .random-button,
 .finalize-button,
+#lookup-spell-button,
 .download-button,
 .upload-button {
     background: darkgreen;
@@ -88,18 +133,9 @@ h1 {
     opacity: 0.7;
 }
 
-.upload-button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    background: darkgreen;
-    color: white;
-}
-
-.download-button {
+.upload-button,
+.download-button,
+#lookup-spell-button {
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 6px;
@@ -168,4 +204,85 @@ h1 {
     padding: 0.6rem 0.75rem;
     color: #1f3d1f;
     font-weight: 600;
+}
+
+.spell-label {
+    color:#3d6b3d
+}
+
+.mastery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.6rem 1rem;
+    margin-top: 1rem;
+}
+
+.mastery-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mastery-group h3 {
+    margin: 0;
+    color: darkgreen;
+}
+
+.mastery-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.mastery-item label {
+    text-align: left;
+    color: darkgreen;
+    font-weight: 600;
+}
+
+.lookup-layout {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.lookup-layout .spell-description {
+    flex: 1 1 320px;
+}
+
+.lookup-controls {
+    max-width: 360px;
+}
+
+.lookup-controls input {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #3d6b3d;
+    border-radius: 6px;
+    background: white;
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin-bottom: 0.75rem;
+}
+
+@media (max-width: 1100px) {
+    .mastery-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .lookup-layout {
+        flex-direction: column;
+    }
+
+    .lookup-controls {
+        max-width: none;
+    }
+}
+
+@media (max-width: 700px) {
+    .mastery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
