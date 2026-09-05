@@ -426,10 +426,10 @@
                     </div>
                     <div class="action-row">
                         <button id="finalize-button" class="finalize-button" type="button" disabled>Finalize</button>
-                        <button id="upload-button" class="upload-button" type="button">Upload</button>
-                        <button id="download-button" class="download-button" type="button" disabled>Download</button>
+                        <button id="mastery-upload-button" class="upload-button" type="button">Upload</button>
+                        <button id="mastery-download-button" class="download-button disabled-button" type="button" disabled>Download</button>
                     </div>
-                    <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
+                    <input id="mastery-upload-json-input" type="file" accept=".json,application/json" style="display: none;">
                 </div>
             </div>
 
@@ -686,6 +686,10 @@
             }
         });
 
+        document.querySelectorAll('#mastery-panel input[name="mastery-checklist"]').forEach((checkbox) => {
+            checkbox.addEventListener('change', updateMasteryDownloadState);
+        });
+
         function setRandomSpells() {
             const selects = document.querySelectorAll('select');
             let mostRecentRandomSelect = null;
@@ -702,6 +706,18 @@
 
             void updateSpellDetails(mostRecentRandomSelect ? mostRecentRandomSelect.options[mostRecentRandomSelect.selectedIndex].text : '');
             validateSpellSelection();
+        }
+
+        function updateMasteryDownloadState() {
+            const masteryDownloadButton = document.getElementById('mastery-download-button');
+
+            if (!masteryDownloadButton) {
+                return;
+            }
+
+            const hasCheckedMastery = document.querySelectorAll('#mastery-panel input[name="mastery-checklist"]:checked').length > 0;
+            masteryDownloadButton.disabled = !hasCheckedMastery;
+            masteryDownloadButton.classList.toggle('disabled-button', !hasCheckedMastery);
         }
 
         document.getElementById('random-button').addEventListener('click', setRandomSpells);
@@ -797,6 +813,97 @@
             reader.readAsText(file);
         });
 
+        document.getElementById('mastery-upload-button').addEventListener('click', function() {
+            const jsonInput = document.getElementById('mastery-upload-json-input');
+            jsonInput.value = '';
+            jsonInput.click();
+        });
+
+        document.getElementById('mastery-upload-json-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const isJsonMime = file.type === 'application/json';
+            const isJsonExt = file.name.toLowerCase().endsWith('.json');
+
+            if (!isJsonMime && !isJsonExt) {
+                alert('Incorrect file format or data. Please upload a json file created by this application.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(loadEvent) {
+                try {
+                    const parsed = JSON.parse(loadEvent.target.result);
+                    const isObject = parsed && typeof parsed === 'object' && !Array.isArray(parsed);
+                    const hasValidTimestamp = typeof parsed.exportedAt === 'string';
+                    const hasSpellArray = Array.isArray(parsed.spells);
+
+                    if (!isObject || !hasValidTimestamp || !hasSpellArray) {
+                        throw new Error('Invalid file structure');
+                    }
+
+                    const masteryCheckboxes = Array.from(document.querySelectorAll('#mastery-panel input[name="mastery-checklist"]'));
+                    const checkboxLookup = new Map(
+                        masteryCheckboxes.map((checkbox) => {
+                            const masteryGroup = checkbox.closest('.mastery-group');
+                            const headingElement = masteryGroup ? masteryGroup.querySelector('h3') : null;
+                            const circle = headingElement ? headingElement.textContent : 'Unknown Circle';
+                            return [`${circle}::${checkbox.value}`, checkbox];
+                        })
+                    );
+
+                    parsed.spells.forEach((spellData) => {
+                        const hasExpectedShape = spellData
+                            && typeof spellData === 'object'
+                            && typeof spellData.circle === 'string'
+                            && typeof spellData.spell === 'string';
+
+                        if (!hasExpectedShape) {
+                            throw new Error('Invalid spell entry');
+                        }
+
+                        const key = `${spellData.circle}::${spellData.spell}`;
+
+                        if (!checkboxLookup.has(key)) {
+                            throw new Error('Selection not available in checklist');
+                        }
+                    });
+
+                    masteryCheckboxes.forEach((checkbox) => {
+                        checkbox.checked = false;
+                    });
+
+                    parsed.spells.forEach((spellData) => {
+                        const key = `${spellData.circle}::${spellData.spell}`;
+                        const checkbox = checkboxLookup.get(key);
+
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+
+                    updateMasteryDownloadState();
+                } catch (error) {
+                    alert('Incorrect file format or data. Please upload a json file created by this application.');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+
+            reader.onerror = function() {
+                alert('Incorrect file format or data. Please upload a json file created by this application.');
+                event.target.value = '';
+            };
+
+            reader.readAsText(file);
+        });
+
         document.getElementById('download-button').addEventListener('click', function() {
             const selections = Array.from(document.querySelectorAll('select')).map((select) => {
                 return {
@@ -823,9 +930,38 @@
             URL.revokeObjectURL(url);
         });
 
+        document.getElementById('mastery-download-button').addEventListener('click', function() {
+            const checkedMasterySpells = Array.from(document.querySelectorAll('#mastery-panel input[name="mastery-checklist"]:checked')).map((checkbox) => {
+                const masteryGroup = checkbox.closest('.mastery-group');
+                const circleHeading = masteryGroup ? masteryGroup.querySelector('h3') : null;
+
+                return {
+                    circle: circleHeading ? circleHeading.textContent : 'Unknown Circle',
+                    spell: checkbox.value
+                };
+            });
+
+            const payload = {
+                exportedAt: new Date().toISOString(),
+                spells: checkedMasterySpells
+            };
+
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = 'mastery-spells.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
+
         setActiveTab('spellbook-panel');
         clearSpellDetails();
         clearLookupSpellDetails();
+        updateMasteryDownloadState();
     </script>
 </body>
 </html>
