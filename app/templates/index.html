@@ -10,336 +10,629 @@
     <main>
         <h1>Duke Domino's Spellbook Maker</h1>
         <p>Allows for spell look up and management. Creates a printable spellbook for easy reference.</p>
+        <div class="ui-tabs">
+            <div class="tab-buttons" role="tablist" aria-label="Spellbook sections">
+                <button class="tab-button active" type="button" role="tab" aria-selected="true" aria-controls="spellbook-panel" data-tab-target="spellbook-panel">Spellbook</button>
+                <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="mastery-panel" data-tab-target="mastery-panel">Spell Mastery</button>
+                <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="caveats-panel" data-tab-target="caveats-panel">Caveats</button>
+                <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="lookup-panel" data-tab-target="lookup-panel">Look Up</button>
+                <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="help-panel" data-tab-target="help-panel">Help</button>
+            </div>
 
-        <div class="spell-layout">
-            <div class="spell-column">
-                <div class="column-header">First Path</div>
-                <div class="spell-entry">
-                    <label for="spell-1">1st Circle</label>
-                    <select id="spell-1" name="spell-1">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-2">2nd Circle</label>
-                    <select id="spell-2" name="spell-2">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-3">3rd Circle</label>
-                    <select id="spell-3" name="spell-3">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-4">4th Circle</label>
-                    <select id="spell-4" name="spell-4">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-5">5th Circle</label>
-                    <select id="spell-5" name="spell-5">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_5 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Fourth Circle</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="tab-panel active" id="spellbook-panel" role="tabpanel">
+                <div class="spell-layout">
+                    <div class="spell-column">
+                        <div class="column-header">First Path</div>
+                        <div class="spell-entry">
+                            <label for="spell-1">1st Circle</label>
+                            <select id="spell-1" name="spell-1">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-2">2nd Circle</label>
+                            <select id="spell-2" name="spell-2">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-3">3rd Circle</label>
+                            <select id="spell-3" name="spell-3">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-4">4th Circle</label>
+                            <select id="spell-4" name="spell-4">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-5">5th Circle</label>
+                            <select id="spell-5" name="spell-5">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_5 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Fourth Circle</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="spell-column">
+                        <div class="column-header">Second Path</div>
+                        <div class="spell-entry">
+                            <label for="spell-6">1st Circle</label>
+                            <select id="spell-6" name="spell-6">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-7">2nd Circle</label>
+                            <select id="spell-7" name="spell-7">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-8">3rd Circle</label>
+                            <select id="spell-8" name="spell-8">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-9">4th Circle</label>
+                            <select id="spell-9" name="spell-9">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-10">5th Circle</label>
+                            <select id="spell-10" name="spell-10">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_5 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Fourth Circle</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-11">6th Circle</label>
+                            <select id="spell-11" name="spell-11">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_6 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Fifth Circle</option>
+                                {% for spell in spells_level_5 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Fourth Circle</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="spell-column">
+                        <div class="column-header">Third Path</div>
+                        <div class="spell-entry">
+                            <label for="spell-12">1st Circle</label>
+                            <select id="spell-12" name="spell-12">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-13">2nd Circle</label>
+                            <select id="spell-13" name="spell-13">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-14">3rd Circle</label>
+                            <select id="spell-14" name="spell-14">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Choose A Buydown</option>
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-15">4th Circle</label>
+                            <select id="spell-15" name="spell-15">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="spell-entry">
+                            <label for="spell-16">5th Circle</label>
+                            <select id="spell-16" name="spell-16">
+                                <option value="" selected>Choose A Spell</option>
+                                {% for spell in spells_level_5 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Fourth Circle</option>
+                                {% for spell in spells_level_4 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Third Circle</option>
+                                {% for spell in spells_level_3 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>Second Circle</option>
+                                {% for spell in spells_level_2 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                                <option value="" disabled>First Circle</option>
+                                {% for spell in spells_level_1 %}
+                                    <option value="{{ spell }}">{{ spell }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="spell-side-panel">
+                        <div class="spell-description">
+                            <h2>Spell Details</h2>
+                            <p>Select a spell to see its details here.</p>
+                            <h3>Spell Name: <span id="spell-name-value" class="spell-label">None</span></h3>
+                            <h3>Spell Circle: <span id="spell-circle-value" class="spell-label">None</span></h3>
+                            <h3>Material: <span id="spell-material-value" class="spell-label">None</span></h3>
+                            <h3>Verbal: <span id="spell-verbal-value" class="spell-label">None</span></h3>
+                            <h3>Action: <span id="spell-action-value" class="spell-label">None</span></h3>
+                            <h3>Uses: <span id="spell-uses-value" class="spell-label">None</span></h3>
+                            <h3>Spell Description: <span id="spell-description-value" class="spell-label">None</span></h3>
+                        </div>
+                        <div class="action-row">
+                        <button id="random-button" class="random-button" type="button">Random</button>
+                        <button id="finalize-button" class="finalize-button disabled-button" type="button" disabled>Finalize</button>
+                        <button id="upload-button" class="upload-button" type="button">Upload</button>
+                        <button id="download-button" class="download-button disabled-button" type="button" disabled>Download</button>
+                    </div>
+                    <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
+                    </div>
                 </div>
             </div>
 
-            <div class="spell-column">
-                <div class="column-header">Second Path</div>
-                <div class="spell-entry">
-                    <label for="spell-6">1st Circle</label>
-                    <select id="spell-6" name="spell-6">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-7">2nd Circle</label>
-                    <select id="spell-7" name="spell-7">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-8">3rd Circle</label>
-                    <select id="spell-8" name="spell-8">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-9">4th Circle</label>
-                    <select id="spell-9" name="spell-9">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}    
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-10">5th Circle</label>
-                    <select id="spell-10" name="spell-10">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_5 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Fourth Circle</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-11">6th Circle</label>
-                    <select id="spell-11" name="spell-11">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_6 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Choose A Buydown</option>
-                        <option value="" disabled>Fifth Circle</option>
-                        {% for spell in spells_level_5 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Fourth Circle</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="tab-panel" id="mastery-panel" role="tabpanel" hidden>
+                <div class="spell-side-panel">
+                    <div class="spell-description">
+                        <h2>Spell Mastery</h2>
+                        <p>Track previously learned spells.</p>
+                        <div class="mastery-groups">
+                            <div class="mastery-group">
+                                <h3>First Circle</h3>
+                                <div class="mastery-grid">
+                                    {% for spell in spells_level_1 %}
+                                        <div class="mastery-item">
+                                            <input type="checkbox" id="mastery-checklist-l1-{{ loop.index }}" name="mastery-checklist" value="{{ spell }}">
+                                            <label for="mastery-checklist-l1-{{ loop.index }}">{{ spell }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="mastery-group">
+                                <h3>Second Circle</h3>
+                                <div class="mastery-grid">
+                                    {% for spell in spells_level_2 %}
+                                        <div class="mastery-item">
+                                            <input type="checkbox" id="mastery-checklist-l2-{{ loop.index }}" name="mastery-checklist" value="{{ spell }}">
+                                            <label for="mastery-checklist-l2-{{ loop.index }}">{{ spell }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="mastery-group">
+                                <h3>Third Circle</h3>
+                                <div class="mastery-grid">
+                                    {% for spell in spells_level_3 %}
+                                        <div class="mastery-item">
+                                            <input type="checkbox" id="mastery-checklist-l3-{{ loop.index }}" name="mastery-checklist" value="{{ spell }}">
+                                            <label for="mastery-checklist-l3-{{ loop.index }}">{{ spell }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="mastery-group">
+                                <h3>Fourth Circle</h3>
+                                <div class="mastery-grid">
+                                    {% for spell in spells_level_4 %}
+                                        <div class="mastery-item">
+                                            <input type="checkbox" id="mastery-checklist-l4-{{ loop.index }}" name="mastery-checklist" value="{{ spell }}">
+                                            <label for="mastery-checklist-l4-{{ loop.index }}">{{ spell }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div> 
+                            <div class="mastery-group">
+                                <h3>Fifth Circle</h3>
+                                <div class="mastery-grid">
+                                    {% for spell in spells_level_5 %}
+                                        <div class="mastery-item">
+                                            <input type="checkbox" id="mastery-checklist-l5-{{ loop.index }}" name="mastery-checklist" value="{{ spell }}">
+                                            <label for="mastery-checklist-l5-{{ loop.index }}">{{ spell }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="mastery-group">
+                                <h3>Sixth Circle</h3>
+                                <div class="mastery-grid">
+                                    {% for spell in spells_level_6 %}
+                                        <div class="mastery-item">
+                                            <input type="checkbox" id="mastery-checklist-l6-{{ loop.index }}" name="mastery-checklist" value="{{ spell }}">
+                                            <label for="mastery-checklist-l6-{{ loop.index }}">{{ spell }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <button id="finalize-button" class="finalize-button" type="button" disabled>Finalize</button>
+                        <button id="upload-button" class="upload-button" type="button">Upload</button>
+                        <button id="download-button" class="download-button" type="button" disabled>Download</button>
+                    </div>
+                    <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
                 </div>
             </div>
 
-            <div class="spell-column">
-                <div class="column-header">Third Path</div>
-                <div class="spell-entry">
-                    <label for="spell-12">1st Circle</label>
-                    <select id="spell-12" name="spell-12">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-13">2nd Circle</label>
-                    <select id="spell-13" name="spell-13">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-14">3rd Circle</label>
-                    <select id="spell-14" name="spell-14">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-15">4th Circle</label>
-                    <select id="spell-15" name="spell-15">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="spell-entry">
-                    <label for="spell-16">5th Circle</label>
-                    <select id="spell-16" name="spell-16">
-                        <option value="" selected>Choose A Spell</option>
-                        {% for spell in spells_level_5 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Fourth Circle</option>
-                        {% for spell in spells_level_4 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Third Circle</option>
-                        {% for spell in spells_level_3 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>Second Circle</option>
-                        {% for spell in spells_level_2 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                        <option value="" disabled>First Circle</option>
-                        {% for spell in spells_level_1 %}
-                            <option value="{{ spell }}">{{ spell }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="tab-panel" id="caveats-panel" role="tabpanel" hidden>
+                <div class="spell-side-panel">
+                    <div class="spell-description">
+                        <h2>Caveats</h2>
+                        <p>Upload the generated JSON file to create a list of applicable caveats for your spells.</p>
+                        <div class="action-row">
+                        <button id="finalize-button" class="finalize-button" type="button" disabled>Finalize</button>
+                        <button id="upload-button" class="upload-button" type="button">Upload</button>
+                        <button id="download-button" class="download-button" type="button" disabled>Download</button>
+                    </div>
+                    <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
+                    </div>
                 </div>
             </div>
 
-            <div class="spell-side-panel">
-                <div class="spell-description">
-                    <h2>Spell Details</h2>
-                    <p>Select a spell to see its details here.</p>
-                    <h3>Spell Name: </h3>
-                    <h3>Spell Circle: </h3>
-                    <h3>Material: </h3>
-                    <h3>Verbal: </h3>
-                    <h3>Action: </h3>
-                    <h3>Spell Description: </h3>
+            <div class="tab-panel" id="lookup-panel" role="tabpanel" hidden>
+                <div class="lookup-layout">
+                    <div class="spell-description lookup-controls">
+                        <h2>Look Up</h2>
+                        <p>Quickly look up spell details and references.</p>
+                        <input type="text" id="lookup-spell-name" placeholder="Enter spell name">
+                        <button id="lookup-spell-button" type="button">Find</button>
+                    </div>
+                    <div class="spell-description">
+                        <h2>Spell Details</h2>
+                        <h3>Spell Name: <span id="lookup-spell-name-value" class="spell-label">None</span></h3>
+                        <h3>Spell Circle: <span id="lookup-spell-circle-value" class="spell-label">None</span></h3>
+                        <h3>Material: <span id="lookup-spell-material-value" class="spell-label">None</span></h3>
+                        <h3>Verbal: <span id="lookup-spell-verbal-value" class="spell-label">None</span></h3>
+                        <h3>Action: <span id="lookup-spell-action-value" class="spell-label">None</span></h3>
+                        <h3>Uses: <span id="lookup-spell-uses-value" class="spell-label">None</span></h3>
+                        <h3>Spell Description: <span id="lookup-spell-description-value" class="spell-label">None</span></h3>
+                    </div>
                 </div>
-                <div class="action-row">
-                    <button id="random-button" class="random-button" type="button">Random</button>
-                    <button id="finalize-button" class="finalize-button disabled-button" type="button" disabled>Finalize</button>
-                    <button id="upload-button" class="upload-button" type="button">Upload</button>
-                    <button id="download-button" class="download-button disabled-button" type="button" disabled>Download</button>
+            </div>
+
+            <div class="tab-panel" id="help-panel" role="tabpanel" hidden>
+                <div class="spell-side-panel">
+                    <div class="spell-description">
+                        <h2>Help</h2>
+                        <p>Use this tab for instructions and guidance for using the tools provided.</p>
+                    </div>
                 </div>
-                <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
             </div>
         </div>
     </main>
 
     <script>
+        const spellDetailFieldIds = {
+            name: 'spell-name-value',
+            circle: 'spell-circle-value',
+            material: 'spell-material-value',
+            verbal: 'spell-verbal-value',
+            action: 'spell-action-value',
+            uses: 'spell-uses-value',
+            description: 'spell-description-value'
+        };
+
+        const lookupSpellDetailFieldIds = {
+            name: 'lookup-spell-name-value',
+            circle: 'lookup-spell-circle-value',
+            material: 'lookup-spell-material-value',
+            verbal: 'lookup-spell-verbal-value',
+            action: 'lookup-spell-action-value',
+            uses: 'lookup-spell-uses-value',
+            description: 'lookup-spell-description-value'
+        };
+
+        function setDetailValue(fieldName, value) {
+            const element = document.getElementById(spellDetailFieldIds[fieldName]);
+
+            if (element) {
+                element.textContent = value === null || value === undefined || value === '' ? 'None' : String(value);
+            }
+        }
+
+        function clearSpellDetails() {
+            Object.keys(spellDetailFieldIds).forEach((fieldName) => {
+                setDetailValue(fieldName, 'None');
+            });
+        }
+
+        function setLookupDetailValue(fieldName, value) {
+            const element = document.getElementById(lookupSpellDetailFieldIds[fieldName]);
+
+            if (element) {
+                element.textContent = value === null || value === undefined || value === '' ? 'None' : String(value);
+            }
+        }
+
+        function clearLookupSpellDetails() {
+            Object.keys(lookupSpellDetailFieldIds).forEach((fieldName) => {
+                setLookupDetailValue(fieldName, 'None');
+            });
+        }
+
+        function updateLookupSpellNameDisplay(spellName) {
+            setLookupDetailValue('name', spellName);
+        }
+
+        function updateSpellNameDisplay(spellName) {
+            setDetailValue('name', spellName);
+        }
+
+        async function updateSpellDetails(spellName) {
+            if (!spellName) {
+                clearSpellDetails();
+                return;
+            }
+
+            updateSpellNameDisplay(spellName);
+            setDetailValue('circle', 'Loading...');
+            setDetailValue('material', 'Loading...');
+            setDetailValue('verbal', 'Loading...');
+            setDetailValue('action', 'Loading...');
+            setDetailValue('uses', 'Loading...');
+            setDetailValue('description', 'Loading...');
+
+            try {
+                const response = await fetch(`/spell/${encodeURIComponent(spellName)}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const payload = await response.json();
+                const spell = payload.spells ?? payload.spell ?? payload;
+
+                if (!spell || typeof spell !== 'object') {
+                    throw new Error('Invalid spell detail payload');
+                }
+
+                updateSpellNameDisplay(spell.name ?? spellName);
+                setDetailValue('circle', spell.circle);
+                setDetailValue('material', spell.material);
+                setDetailValue('verbal', spell.verbal);
+                setDetailValue('action', spell.active);
+                setDetailValue('uses', spell.uses);
+                setDetailValue('description', spell.description);
+            } catch (error) {
+                clearSpellDetails();
+                updateSpellNameDisplay(spellName);
+            }
+        }
+
+        async function updateLookupSpellDetails(spellName) {
+            if (!spellName) {
+                clearLookupSpellDetails();
+                return;
+            }
+
+            updateLookupSpellNameDisplay(spellName);
+            setLookupDetailValue('circle', 'Loading...');
+            setLookupDetailValue('material', 'Loading...');
+            setLookupDetailValue('verbal', 'Loading...');
+            setLookupDetailValue('action', 'Loading...');
+            setLookupDetailValue('uses', 'Loading...');
+            setLookupDetailValue('description', 'Loading...');
+
+            try {
+                const response = await fetch(`/spell/${encodeURIComponent(spellName)}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const payload = await response.json();
+                const spell = payload.spells ?? payload.spell ?? payload;
+
+                if (!spell || typeof spell !== 'object') {
+                    throw new Error('Invalid spell detail payload');
+                }
+
+                updateLookupSpellNameDisplay(spell.name ?? spellName);
+                setLookupDetailValue('circle', spell.circle);
+                setLookupDetailValue('material', spell.material);
+                setLookupDetailValue('verbal', spell.verbal);
+                setLookupDetailValue('action', spell.active);
+                setLookupDetailValue('uses', spell.uses);
+                setLookupDetailValue('description', spell.description);
+            } catch (error) {
+                clearLookupSpellDetails();
+                updateLookupSpellNameDisplay(spellName);
+            }
+        }
+
+        function setActiveTab(tabId) {
+            document.querySelectorAll('.tab-button').forEach((button) => {
+                const isActive = button.dataset.tabTarget === tabId;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-selected', String(isActive));
+            });
+
+            document.querySelectorAll('.tab-panel').forEach((panel) => {
+                const isActive = panel.id === tabId;
+                panel.classList.toggle('active', isActive);
+                panel.hidden = !isActive;
+            });
+        }
+
         function validateSpellSelection() {
             const selects = document.querySelectorAll('select');
             const defaultText = 'Choose A Spell';
@@ -367,12 +660,35 @@
             return allSelected;
         }
 
+        document.querySelectorAll('.tab-button').forEach((button) => {
+            button.addEventListener('click', function() {
+                setActiveTab(button.dataset.tabTarget);
+            });
+        });
+
         document.querySelectorAll('select').forEach((select) => {
-            select.addEventListener('change', validateSpellSelection);
+            select.addEventListener('change', function(event) {
+                const changedSelect = event.target;
+                void updateSpellDetails(changedSelect.value ? changedSelect.options[changedSelect.selectedIndex].text : '');
+                validateSpellSelection();
+            });
+        });
+
+        document.getElementById('lookup-spell-button').addEventListener('click', function() {
+            const lookupInput = document.getElementById('lookup-spell-name');
+            void updateLookupSpellDetails(lookupInput.value.trim());
+        });
+
+        document.getElementById('lookup-spell-name').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                void updateLookupSpellDetails(event.target.value.trim());
+            }
         });
 
         function setRandomSpells() {
             const selects = document.querySelectorAll('select');
+            let mostRecentRandomSelect = null;
 
             selects.forEach((select) => {
                 if (select.options.length <= 1) {
@@ -381,8 +697,10 @@
 
                 const randomIndex = Math.floor(Math.random() * (select.options.length - 1)) + 1;
                 select.selectedIndex = randomIndex;
+                mostRecentRandomSelect = select;
             });
 
+            void updateSpellDetails(mostRecentRandomSelect ? mostRecentRandomSelect.options[mostRecentRandomSelect.selectedIndex].text : '');
             validateSpellSelection();
         }
 
@@ -461,6 +779,8 @@
                         select.value = spellData.value;
                     });
 
+                    const mostRecentSelect = selectMap.get(parsed.spells[parsed.spells.length - 1].id);
+                    void updateSpellDetails(mostRecentSelect ? mostRecentSelect.options[mostRecentSelect.selectedIndex].text : '');
                     validateSpellSelection();
                 } catch (error) {
                     alert('Incorrect file format or data. Please upload a json file created by this application.');
@@ -502,6 +822,10 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         });
+
+        setActiveTab('spellbook-panel');
+        clearSpellDetails();
+        clearLookupSpellDetails();
     </script>
 </body>
 </html>

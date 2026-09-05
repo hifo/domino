@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from urllib.parse import quote
 from typing import Any
 
 import requests
@@ -32,3 +33,19 @@ def fetch_api_list(url: str | None = None, params: dict[str, Any] | None = None,
                 return value
 
     raise ValueError(f"Expected a list response from {url}, got {type(payload).__name__}")
+
+
+def fetch_spell_detail(spell_name: str, timeout: int = 10) -> dict[str, Any]:
+    """Fetch the upstream spell detail payload for a specific spell name."""
+    encoded_spell_name = quote(spell_name, safe="")
+    request_url = f"{BASE_URL}/antioch/api/v1.0/spell/{encoded_spell_name}"
+
+    response = requests.get(request_url, timeout=timeout)
+    response.raise_for_status()
+
+    payload = response.json()
+
+    if isinstance(payload, dict):
+        return payload
+
+    raise ValueError(f"Expected a dictionary response from {spell_name}, got {type(payload).__name__}")
