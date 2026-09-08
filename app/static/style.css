@@ -94,8 +94,10 @@ h1 {
 
 .action-row {
     display: flex;
+    justify-content: center;
     gap: 0.75rem;
     align-items: center;
+    width: 100%;
 }
 
 .validate-button,
@@ -183,6 +185,41 @@ h1 {
     background: rgba(255, 255, 255, 0.4);
     padding: 1rem 1.25rem;
     max-width: 800px;
+}
+
+.caveat-results {
+    margin-top: 1rem;
+    border: 1px solid #3d6b3d;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.35);
+    padding: 0.75rem 1rem;
+}
+
+.caveat-results h3 {
+    margin-top: 0;
+    color: darkgreen;
+}
+
+.caveat-results ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.caveat-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.caveat-name {
+    font-weight: 700;
+    min-width: 180px;
+}
+
+.caveat-detail-list {
+    margin: 0;
+    padding-left: 1.2rem;
 }
 
 .api-results h2 {
@@ -286,6 +323,29 @@ h1 {
 }
 
 @media (max-width: 1100px) {
+    main {
+        padding: 1.25rem;
+    }
+
+    .spell-layout {
+        flex-wrap: wrap;
+        gap: 1.25rem;
+    }
+
+    .spell-column {
+        flex: 1 1 240px;
+        max-width: none;
+    }
+
+    .spell-side-panel {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .spell-description {
+        min-height: 0;
+    }
+
     .mastery-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -299,7 +359,72 @@ h1 {
     }
 }
 
+@media (max-width: 900px) {
+    .tab-buttons {
+        display: flex;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: thin;
+    }
+
+    .tab-button {
+        flex: 0 0 auto;
+    }
+
+    .spell-layout {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .spell-column,
+    .spell-side-panel {
+        width: 100%;
+    }
+
+    .action-row {
+        flex-wrap: wrap;
+    }
+
+    .action-row button {
+        flex: 1 1 44%;
+    }
+
+    .caveat-item {
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .caveat-name {
+        min-width: 0;
+    }
+}
+
 @media (max-width: 700px) {
+    main {
+        padding: 0.9rem;
+    }
+
+    .tab-button {
+        padding: 0.65rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    .action-row button {
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    .spell-entry select,
+    .lookup-controls input,
+    #lookup-spell-button,
+    .random-button,
+    .finalize-button,
+    .download-button,
+    .upload-button {
+        font-size: 0.95rem;
+    }
+
     .mastery-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
