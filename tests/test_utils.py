@@ -1,6 +1,14 @@
-import pytest
+import threading
+from pathlib import Path
 
+import pytest
+from werkzeug.serving import make_server
+
+from app import create_app
 from utils.utils import fetch_api_list, fetch_spell_detail
+
+pytest.importorskip("playwright")
+from playwright.sync_api import sync_playwright
 
 
 class DummyResponse:
@@ -82,3 +90,74 @@ def test_fetch_spell_detail_uses_encoded_spell_name(monkeypatch):
     monkeypatch.setattr("requests.get", fake_get)
 
     assert fetch_spell_detail("Cure Disease") == {"spells": {"name": "Cure Disease", "circle": 1}}
+
+
+def test_caveats_upload_has_unique_ids_and_spell_list_container():
+    html = Path("app/templates/index.html").read_text(encoding="utf-8")
+
+    assert 'id="caveats-upload-button"' in html
+    assert 'id="caveats-upload-json-input"' in html
+    assert 'id="caveats-spell-list"' in html
+    assert "fetch(`/spell/${encodeURIComponent(spellName)}`)" in html
+
+
+def test_app_smoke_loads_caveats_upload_controls():
+    app = create_app()
+    client = app.test_client()
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert "Caveats" in html
+    assert 'id="caveats-upload-button"' in html
+    assert 'id="caveats-upload-json-input"' in html
+    assert 'id="caveats-spell-list-wrapper"' in html
+
+
+def test_spellbook_details_include_caveats_field():
+    html = Path("app/templates/index.html").read_text(encoding="utf-8")
+
+    assert 'id="spell-caveats-value"' in html
+    assert "setDetailValue('caveats'" in html
+
+
+def test_spell_detail_parser_accepts_string_caveats_value():
+    html = Path("app/templates/index.html").read_text(encoding="utf-8")
+
+    assert "typeof spell.caveats === 'string'" in html
+    assert "spell.caveats" in html
+
+
+def test_browser_smoke_clicks_caveats_upload_button():
+    app = create_app()
+    server = make_server("127.0.0.1", 5001, app)
+    thread = threading.Thread(target=server.serve_forever)
+    thread.daemon = True
+    thread.start()
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto("http://127.0.0.1:5001/", wait_until="domcontentloaded")
+            page.locator('[data-tab-target="caveats-panel"]').click()
+            page.evaluate(
+                """
+                () => {
+                    const input = document.getElementById('caveats-upload-json-input');
+                    window.__caveatsInputClicked = 0;
+                    input.click = () => {
+                        window.__caveatsInputClicked += 1;
+                    };
+                }
+                """
+            )
+
+            page.locator('#caveats-upload-button').click()
+
+            assert page.evaluate("() => window.__caveatsInputClicked") == 1
+            browser.close()
+    finally:
+        server.shutdown()
+        thread.join(timeout=5)

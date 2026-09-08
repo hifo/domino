@@ -236,6 +236,12 @@
                                 {% endfor %}
                             </select>
                         </div>
+                        <div class="action-row">
+                            <button id="random-button" class="random-button" type="button">Random</button>
+                            <button id="finalize-button" class="finalize-button disabled-button" type="button" disabled>Finalize</button>
+                            <button id="upload-button" class="upload-button" type="button">Upload</button>
+                            <button id="download-button" class="download-button disabled-button" type="button" disabled>Download</button>
+                        </div>
                     </div>
 
                     <div class="spell-column">
@@ -338,14 +344,9 @@
                             <h3>Verbal: <span id="spell-verbal-value" class="spell-label">None</span></h3>
                             <h3>Action: <span id="spell-action-value" class="spell-label">None</span></h3>
                             <h3>Uses: <span id="spell-uses-value" class="spell-label">None</span></h3>
+                            <h3>Caveats: <span id="spell-caveats-value" class="spell-label">None</span></h3>
                             <h3>Spell Description: <span id="spell-description-value" class="spell-label">None</span></h3>
                         </div>
-                        <div class="action-row">
-                        <button id="random-button" class="random-button" type="button">Random</button>
-                        <button id="finalize-button" class="finalize-button disabled-button" type="button" disabled>Finalize</button>
-                        <button id="upload-button" class="upload-button" type="button">Upload</button>
-                        <button id="download-button" class="download-button disabled-button" type="button" disabled>Download</button>
-                    </div>
                     <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
                     </div>
                 </div>
@@ -440,11 +441,15 @@
                         <h2>Caveats</h2>
                         <p>Upload the generated JSON file to create a list of applicable caveats for your spells.</p>
                         <div class="action-row">
-                        <button id="finalize-button" class="finalize-button" type="button" disabled>Finalize</button>
-                        <button id="upload-button" class="upload-button" type="button">Upload</button>
-                        <button id="download-button" class="download-button" type="button" disabled>Download</button>
-                    </div>
-                    <input id="upload-json-input" type="file" accept=".json,application/json" style="display: none;">
+                            <button id="caveats-finalize-button" class="finalize-button" type="button" disabled>Finalize</button>
+                            <button id="caveats-upload-button" class="upload-button" type="button">Upload</button>
+                            <button id="caveats-download-button" class="download-button" type="button" disabled>Download</button>
+                        </div>
+                        <div id="caveats-spell-list-wrapper" class="caveat-results" hidden>
+                            <h3>Selected Spells</h3>
+                            <ul id="caveats-spell-list"></ul>
+                        </div>
+                        <input id="caveats-upload-json-input" type="file" accept=".json,application/json" style="display: none;">
                     </div>
                 </div>
             </div>
@@ -511,6 +516,7 @@
             verbal: 'spell-verbal-value',
             action: 'spell-action-value',
             uses: 'spell-uses-value',
+            caveats: 'spell-caveats-value',
             description: 'spell-description-value'
         };
 
@@ -572,6 +578,7 @@
             setDetailValue('verbal', 'Loading...');
             setDetailValue('action', 'Loading...');
             setDetailValue('uses', 'Loading...');
+            setDetailValue('caveats', 'Loading...');
             setDetailValue('description', 'Loading...');
 
             try {
@@ -588,12 +595,29 @@
                     throw new Error('Invalid spell detail payload');
                 }
 
+                const caveats = typeof spell.caveats === 'string'
+                    ? [spell.caveats]
+                    : Array.isArray(spell.caveats)
+                        ? spell.caveats
+                        : typeof payload?.caveats === 'string'
+                            ? [payload.caveats]
+                            : Array.isArray(payload?.caveats)
+                                ? payload.caveats
+                                : Array.isArray(spell.caveats_list)
+                                    ? spell.caveats_list
+                                    : [];
+
+                const caveatText = caveats.length > 0
+                    ? caveats.map((caveat) => typeof caveat === 'string' ? caveat : (caveat?.name ?? caveat?.text ?? String(caveat))).join(', ')
+                    : 'None';
+
                 updateSpellNameDisplay(spell.name ?? spellName);
                 setDetailValue('circle', spell.circle);
                 setDetailValue('material', spell.material);
                 setDetailValue('verbal', spell.verbal);
                 setDetailValue('action', spell.active);
                 setDetailValue('uses', spell.uses);
+                setDetailValue('caveats', caveatText);
                 setDetailValue('description', spell.description);
             } catch (error) {
                 clearSpellDetails();
@@ -718,12 +742,16 @@
             let mostRecentRandomSelect = null;
 
             selects.forEach((select) => {
-                if (select.options.length <= 1) {
+                const selectableOptions = Array.from(select.options).filter((option) => {
+                    return option.value && !option.disabled && option.text !== 'Choose A Spell';
+                });
+
+                if (selectableOptions.length === 0) {
                     return;
                 }
 
-                const randomIndex = Math.floor(Math.random() * (select.options.length - 1)) + 1;
-                select.selectedIndex = randomIndex;
+                const randomOption = selectableOptions[Math.floor(Math.random() * selectableOptions.length)];
+                select.value = randomOption.value;
                 mostRecentRandomSelect = select;
             });
 
@@ -745,10 +773,33 @@
 
         document.getElementById('random-button').addEventListener('click', setRandomSpells);
 
-        document.getElementById('upload-button').addEventListener('click', function() {
-            const jsonInput = document.getElementById('upload-json-input');
+        function openJsonUpload(inputId) {
+            const jsonInput = document.getElementById(inputId);
+
+            if (!jsonInput) {
+                return;
+            }
+
             jsonInput.value = '';
+
+            const previousDisplay = jsonInput.style.display;
+            jsonInput.style.display = 'block';
+            jsonInput.style.position = 'fixed';
+            jsonInput.style.left = '-10000px';
+            jsonInput.style.top = '-10000px';
+            jsonInput.style.opacity = '0';
+            jsonInput.style.pointerEvents = 'none';
             jsonInput.click();
+            jsonInput.style.display = previousDisplay;
+            jsonInput.style.position = '';
+            jsonInput.style.left = '';
+            jsonInput.style.top = '';
+            jsonInput.style.opacity = '';
+            jsonInput.style.pointerEvents = '';
+        }
+
+        document.getElementById('upload-button').addEventListener('click', function() {
+            openJsonUpload('upload-json-input');
         });
 
         document.getElementById('upload-json-input').addEventListener('change', function(event) {
@@ -836,10 +887,157 @@
             reader.readAsText(file);
         });
 
+        function renderCaveatSpellNames(spellNames) {
+            return loadCaveatSpellDetails(spellNames);
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        async function loadCaveatSpellDetails(spellNames) {
+            const list = document.getElementById('caveats-spell-list');
+            const wrapper = document.getElementById('caveats-spell-list-wrapper');
+
+            if (!list || !wrapper) {
+                return;
+            }
+
+            list.innerHTML = '';
+
+            if (!Array.isArray(spellNames) || spellNames.length === 0) {
+                wrapper.hidden = true;
+                return;
+            }
+
+            const uniqueNames = [...new Set(spellNames.filter((name) => typeof name === 'string' && name.trim() !== ''))];
+
+            const entries = await Promise.all(uniqueNames.map(async (spellName) => {
+                try {
+                    const response = await fetch(`/spell/${encodeURIComponent(spellName)}`);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const payload = await response.json();
+                    const spell = payload.spells ?? payload.spell ?? payload;
+                    const caveats = typeof spell?.caveats === 'string'
+                        ? [spell.caveats]
+                        : Array.isArray(spell?.caveats)
+                            ? spell.caveats
+                            : typeof payload?.caveats === 'string'
+                                ? [payload.caveats]
+                                : Array.isArray(payload?.caveats)
+                                    ? payload.caveats
+                                    : Array.isArray(spell?.caveats_list)
+                                        ? spell.caveats_list
+                                        : [];
+
+                    return {
+                        name: spellName,
+                        caveats: caveats.length > 0
+                            ? caveats.map((caveat) => typeof caveat === 'string' ? caveat : (caveat?.name ?? caveat?.text ?? String(caveat)))
+                            : ['No caveats found']
+                    };
+                } catch (error) {
+                    return {
+                        name: spellName,
+                        caveats: ['Unable to load caveats']
+                    };
+                }
+            }));
+
+            entries.forEach(({ name, caveats }) => {
+                const item = document.createElement('li');
+                const caveatList = caveats.map((caveat) => {
+                    return `<li>${escapeHtml(caveat)}</li>`;
+                }).join('');
+
+                item.innerHTML = `
+                    <div class="caveat-item">
+                        <span class="caveat-name">${escapeHtml(name)}</span>
+                        <ul class="caveat-detail-list">${caveatList}</ul>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            wrapper.hidden = false;
+        }
+
+        document.getElementById('caveats-upload-button').addEventListener('click', function() {
+            openJsonUpload('caveats-upload-json-input');
+        });
+
+        document.getElementById('caveats-upload-json-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const isJsonMime = file.type === 'application/json';
+            const isJsonExt = file.name.toLowerCase().endsWith('.json');
+
+            if (!isJsonMime && !isJsonExt) {
+                alert('Incorrect file format or data. Please upload a json file created by this application.');
+                event.target.value = '';
+                renderCaveatSpellNames([]);
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(loadEvent) {
+                try {
+                    const parsed = JSON.parse(loadEvent.target.result);
+                    const isObject = parsed && typeof parsed === 'object' && !Array.isArray(parsed);
+                    const hasValidTimestamp = typeof parsed.exportedAt === 'string';
+                    const hasSpellArray = Array.isArray(parsed.spells);
+
+                    if (!isObject || !hasValidTimestamp || !hasSpellArray) {
+                        throw new Error('Invalid file structure');
+                    }
+
+                    parsed.spells.forEach((spellData) => {
+                        const hasExpectedShape = spellData
+                            && typeof spellData === 'object'
+                            && typeof spellData.id === 'string'
+                            && typeof spellData.value === 'string'
+                            && typeof spellData.text === 'string';
+
+                        if (!hasExpectedShape) {
+                            throw new Error('Invalid spell entry');
+                        }
+                    });
+
+                    const spellNames = parsed.spells.map((spell) => spell.text);
+                    void loadCaveatSpellDetails(spellNames);
+                } catch (error) {
+                    void loadCaveatSpellDetails([]);
+                    alert('Incorrect file format or data. Please upload a json file created by this application.');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+
+            reader.onerror = function() {
+                void loadCaveatSpellDetails([]);
+                alert('Incorrect file format or data. Please upload a json file created by this application.');
+                event.target.value = '';
+            };
+
+            reader.readAsText(file);
+        });
+
         document.getElementById('mastery-upload-button').addEventListener('click', function() {
-            const jsonInput = document.getElementById('mastery-upload-json-input');
-            jsonInput.value = '';
-            jsonInput.click();
+            openJsonUpload('mastery-upload-json-input');
         });
 
         document.getElementById('mastery-upload-json-input').addEventListener('change', function(event) {
